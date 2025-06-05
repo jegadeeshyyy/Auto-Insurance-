@@ -1,0 +1,47 @@
+<div class="full-page-gradient">
+  <div class="centered-card">
+    <h1 class="card-title">
+      <i class="bi bi-shield-check me-2"></i> Active Policies
+    </h1>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading active policies, please wait...</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!isLoading && activePolicies.length > 0">
+      <table class="policy-table">
+        <thead>
+          <tr>
+            <th>Policy Number</th>
+            <th>Username</th>
+            <th>Policy Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let policy of activePolicies">
+            <td>{{ policy.policyNumber }}</td>
+            <td>{{ policy.userName }}</td>
+            <td>
+              <span class="status-badge">{{ policy.policyStatus }}</span>
+            </td>
+            <td>{{ policy.policyStartDate | date }}</td>
+            <td>{{ policy.policyEndDate | date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!isLoading && activePolicies.length === 0" class="empty-state">
+      <i class="bi bi-info-circle-fill"></i>
+      <h3>No active policies found</h3>
+      <p>There are currently no active policies.</p>
+    </div>
+  </div>
+</div>

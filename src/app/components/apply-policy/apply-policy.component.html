@@ -1,0 +1,137 @@
+<div class="apply-policy-container bg-gradient-skyblue">
+  <div class="policy-application-card">
+    <div class="application-header text-center mb-4">
+      <h2 class="text-primary">
+        <i class="bi bi-file-earmark-text me-2"></i>Apply for Policy
+      </h2>
+      <div class="policy-number-badge">
+        <i class="bi bi-hash"></i> {{ policyNumber }}
+      </div>
+    </div>
+
+    <form [formGroup]="applyForm" (ngSubmit)="submitApplication()" enctype="multipart/form-data" class="application-form">
+      <div class="form-group mb-4">
+        <label for="userName" class="form-label">
+          <i class="bi bi-person-fill me-2"></i>Full Name
+        </label>
+        <input
+          id="userName"
+          type="text"
+          class="form-control"
+          formControlName="userName"
+          placeholder="Enter your full name"
+          [ngClass]="{ 'is-invalid': applyForm.get('userName')?.invalid && applyForm.get('userName')?.touched }"
+        />
+        <div *ngIf="applyForm.get('userName')?.invalid && applyForm.get('userName')?.touched" class="invalid-feedback">
+          <i class="bi bi-exclamation-circle"></i> Name is required
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="email" class="form-label">
+          <i class="bi bi-envelope-fill me-2"></i>Email Address
+        </label>
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="Enter your email"
+          [ngClass]="{ 'is-invalid': applyForm.get('email')?.invalid && applyForm.get('email')?.touched }"
+        />
+        <div *ngIf="applyForm.get('email')?.invalid && applyForm.get('email')?.touched" class="invalid-feedback">
+          <i class="bi bi-exclamation-circle"></i> A valid email is required
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="durationInMonths" class="form-label">
+          <i class="bi bi-calendar-range me-2"></i>Policy Duration (months)
+        </label>
+        <input
+          id="durationInMonths"
+          type="number"
+          class="form-control"
+          formControlName="durationInMonths"
+          placeholder="Enter duration in months"
+          [ngClass]="{ 'is-invalid': applyForm.get('durationInMonths')?.invalid && applyForm.get('durationInMonths')?.touched }"
+        />
+        <div *ngIf="applyForm.get('durationInMonths')?.invalid && applyForm.get('durationInMonths')?.touched" class="invalid-feedback">
+          <i class="bi bi-exclamation-circle"></i> Duration should be at least 1 month
+        </div>
+      </div>
+
+      <div class="file-upload-section mb-4">
+        <h5 class="section-title mb-3">
+          <i class="bi bi-paperclip me-2"></i>Required Documents
+        </h5>
+       
+        <div class="file-upload-card mb-3" [class.file-uploaded]="uploadedFiles.drivingLicense">
+          <label for="drivingLicense" class="file-upload-label">
+            <div class="file-upload-icon">
+              <i class="bi" [class.bi-file-earmark-pdf]="!uploadedFiles.drivingLicense" [class.bi-check-circle-fill]="uploadedFiles.drivingLicense"></i>
+            </div>
+            <div class="file-upload-info">
+              <span class="file-title">Driving License</span>
+              <span class="file-requirements">
+                <span *ngIf="!uploadedFiles.drivingLicense">PDF format, max 5MB</span>
+                <span *ngIf="uploadedFiles.drivingLicense" class="file-name">{{ uploadedFiles.drivingLicense.name }}</span>
+              </span>
+            </div>
+          </label>
+          <input
+            id="drivingLicense"
+            type="file"
+            class="d-none"
+            (change)="handleFileInput($event, 'drivingLicense')"
+            accept="application/pdf"
+          />
+          <div *ngIf="fileErrors.drivingLicense" class="invalid-feedback">
+            <i class="bi bi-exclamation-circle"></i> {{ fileErrors.drivingLicense }}
+          </div>
+          <button *ngIf="uploadedFiles.drivingLicense" type="button" class="btn-remove-file" (click)="uploadedFiles.drivingLicense = null; fileErrors.drivingLicense = null">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+
+        <div class="file-upload-card" [class.file-uploaded]="uploadedFiles.idProof">
+          <label for="idProof" class="file-upload-label">
+            <div class="file-upload-icon">
+              <i class="bi" [class.bi-file-earmark-pdf]="!uploadedFiles.idProof" [class.bi-check-circle-fill]="uploadedFiles.idProof"></i>
+            </div>
+            <div class="file-upload-info">
+              <span class="file-title">ID Proof</span>
+              <span class="file-requirements">
+                <span *ngIf="!uploadedFiles.idProof">PDF format, max 5MB</span>
+                <span *ngIf="uploadedFiles.idProof" class="file-name">{{ uploadedFiles.idProof.name }}</span>
+              </span>
+            </div>
+          </label>
+          <input
+            id="idProof"
+            type="file"
+            class="d-none"
+            (change)="handleFileInput($event, 'idProof')"
+            accept="application/pdf"
+          />
+          <div *ngIf="fileErrors.idProof" class="invalid-feedback">
+            <i class="bi bi-exclamation-circle"></i> {{ fileErrors.idProof }}
+          </div>
+          <button *ngIf="uploadedFiles.idProof" type="button" class="btn-remove-file" (click)="uploadedFiles.idProof = null; fileErrors.idProof = null">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="d-grid">
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg submit-button"
+          [disabled]="applyForm.invalid || hasFileErrors()"
+        >
+          <i class="bi bi-send-fill me-2"></i>Submit Application
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

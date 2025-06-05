@@ -1,0 +1,78 @@
+.heavy-vehicle-container {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.bg-gradient-skyblue {
+  background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);
+}
+
+.policy-card {
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  border: none;
+}
+
+.policy-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.bg-skyblue {
+  background-color: #56ccf2;
+}
+
+.loading {
+  color: white;
+}
+
+.no-policies {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.btn-outline-light:hover {
+  color: #2f80ed;
+  background-color: white;
+}
+
+.policy-details p {
+  margin-bottom: 0.8rem;
+}
+
+.card-footer {
+  padding: 1rem 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .policy-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .policies-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.bg-gold {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 50rem;
+}

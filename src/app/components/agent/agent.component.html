@@ -1,0 +1,234 @@
+<div class="agent-dashboard-container bg-gradient-skyblue">
+
+  <div class="dashboard-card">
+    
+    <div class="dashboard-header">
+      <h1 class="text-primary">
+        <i class="bi bi-clipboard-data me-2"></i>Insurance Applications
+      </h1>
+   
+      <div class="filter-container">
+        <div class="input-group">
+          <label for="applicationFilter" class="input-group-text bg-white">
+            <i class="bi bi-funnel"></i>
+          </label>
+          <select
+            id="applicationFilter"
+            class="form-select"
+            [(ngModel)]="selectedFilter"
+            (change)="onFilterChange($event)"
+          >
+            <option value="pending">Pending Applications</option>
+            <option value="approved">Approved Policies</option>
+            <option value="rejected">Rejected Policies</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedFilter === 'pending'" class="table-section">
+      <h2 class="section-title">
+        <i class="bi bi-hourglass-split me-2"></i>Pending Applications
+      </h2>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th><i class="bi bi-person me-2"></i>Username</th>
+              <th><i class="bi bi-hash me-2"></i>Policy Number</th>
+              <th><i class="bi bi-info-circle me-2"></i>Status</th>
+              <th><i class="bi bi-gear me-2"></i>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let application of filteredApplications">
+              <td>{{ application.userName }}</td>
+              <td>{{ application.policyNumber }}</td>
+              <td>
+                <span class="badge bg-warning text-dark">
+                  {{ application.approvalStatus }}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="openPopup(application)"
+                >
+                  <i class="bi bi-eye me-1"></i>View
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="selectedFilter === 'approved'" class="table-section">
+      <h2 class="section-title">
+        <i class="bi bi-check-circle me-2"></i>Approved Policies
+      </h2>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th><i class="bi bi-person me-2"></i>Username</th>
+              <th><i class="bi bi-hash me-2"></i>Policy Number</th>
+              <th><i class="bi bi-info-circle me-2"></i>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let application of filteredApplications">
+              <td>{{ application.userName }}</td>
+              <td>{{ application.policyNumber }}</td>
+              <td>
+                <span class="badge bg-success">
+                  {{ application.approvalStatus }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="selectedFilter === 'rejected'" class="table-section">
+      <h2 class="section-title">
+        <i class="bi bi-x-circle me-2"></i>Rejected Policies
+      </h2>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th><i class="bi bi-person me-2"></i>Username</th>
+              <th><i class="bi bi-hash me-2"></i>Policy Number</th>
+              <th><i class="bi bi-info-circle me-2"></i>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let application of filteredApplications">
+              <td>{{ application.userName }}</td>
+              <td>{{ application.policyNumber }}</td>
+              <td>
+                <span class="badge bg-danger">
+                  {{ application.approvalStatus }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="isPopupOpen"></div>
+  <div class="application-modal" *ngIf="isPopupOpen" [class.show]="isPopupOpen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="bi bi-file-earmark-text me-2"></i>Application Details
+        </h2>
+        <button class="btn-close" (click)="closePopup()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row">
+          <span class="detail-label"><i class="bi bi-person me-2"></i>Username:</span>
+          <span class="detail-value">{{ selectedApplication?.userName }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="bi bi-hash me-2"></i>Policy Number:</span>
+          <span class="detail-value">{{ selectedApplication?.policyNumber }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="bi bi-envelope me-2"></i>Email:</span>
+          <span class="detail-value">{{ selectedApplication?.email }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="bi bi-calendar me-2"></i>Duration:</span>
+          <span class="detail-value">{{ selectedApplication?.durationInMonths }} months</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="bi bi-file-earmark-pdf me-2"></i>Driving License:</span>
+          <span class="detail-value">
+            <a
+              *ngIf="selectedApplication?.drivingLicense"
+              [href]="'http://localhost:5000/' + selectedApplication?.drivingLicense"
+              target="_blank"
+              class="btn btn-sm btn-outline-primary"
+            >
+              <i class="bi bi-eye me-1"></i>View
+            </a>
+            <span *ngIf="!selectedApplication?.drivingLicense" class="text-muted">
+              Not available
+            </span>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="bi bi-file-earmark-text me-2"></i>ID Proof:</span>
+          <span class="detail-value">
+            <a
+              *ngIf="selectedApplication?.idProof"
+              [href]="'http://localhost:5000/' + selectedApplication?.idProof"
+              target="_blank"
+              class="btn btn-sm btn-outline-primary"
+            >
+              <i class="bi bi-eye me-1"></i>View
+            </a>
+            <span *ngIf="!selectedApplication?.idProof" class="text-muted">
+              Not available
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="approveApplication()">
+          <i class="bi bi-check-circle me-1"></i>Approve
+        </button>
+        <button class="btn btn-danger" (click)="rejectApplication()">
+          <i class="bi bi-x-circle me-1"></i>Reject
+        </button>
+        <button class="btn btn-secondary" (click)="closePopup()">
+          <i class="bi bi-x-lg me-1"></i>Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer mt-5 py-4 bg-dark text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h5><i class="bi bi-shield-lock me-2"></i> Vehisafe</h5>
+        <p>Protecting what matters most to you since 2010.</p>
+        <div class="social-icons">
+          <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Home</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Claims</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Support</a></li>
+          <li><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h5>Legal</h5>
+        <ul class="list-unstyled">
+          <li><a href="/privacy-policy" class="text-white text-decoration-none">Privacy Policy</a></li>
+          <li><a href="/terms-of-service" class="text-white text-decoration-none">Terms of Service</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Cookies Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="my-4 bg-light">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <p class="mb-0">&copy; 2025 Vehisafe. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>

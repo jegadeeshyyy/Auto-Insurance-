@@ -1,0 +1,59 @@
+<div class="policies-list-container bg-gradient-skyblue">
+    <div *ngIf="isLoading" class="loading text-center py-5">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-light">Loading policies...</p>
+    </div>
+  
+    <div *ngIf="errorMessage" class="alert alert-danger mx-3 mx-md-5 mt-4">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="!isLoading && policies.length > 0" class="policies-container py-4 px-3 px-md-5">
+      <h2 class="text-center text-white mb-4">
+        <i class="bi bi-shield-check me-2"></i>Available Policies
+      </h2>
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4" *ngFor="let policy of policies">
+          <div class="policy-card card bg-white shadow-sm h-100 d-flex flex-column">
+            <div class="card-body flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start">
+                <h3 class="card-title text-primary">{{ policy.policyName }}</h3>
+                <span class="badge text-white"
+                [class.bg-two-wheeler]="policy.policyType === 'two-wheeler'"
+                [class.bg-four-wheeler]="policy.policyType === 'four-wheeler'"
+                [class.bg-heavy-vehicle]="policy.policyType === 'heavy-vehicle'"
+                [class.bg-skyblue]="!policy.policyType">
+                {{ policy.policyType || 'Standard' | titlecase }}
+                </span>
+              </div>
+              <hr>
+              <div class="policy-details">
+                <p><strong><i class="bi bi-file-text me-2"></i>Policy Number:</strong> {{ policy.policyNumber }}</p>
+                <p><strong><i class="bi bi-cash-coin me-2"></i>Premium:</strong> {{ policy.premiumAmount | currency:'INR':'symbol' }}</p>
+                <p><strong><i class="bi bi-shield-check me-2"></i>Coverage:</strong> {{ policy.coverageAmount | currency:'INR':'symbol' }}</p>
+                <p class="mb-3"><strong><i class="bi bi-info-circle me-2"></i>Description:</strong> {{ policy.description }}</p>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+              <button class="btn btn-primary w-100" (click)="applyForPolicy(policy.policyNumber)">
+                <i class="bi bi-pencil-square me-2"></i>Apply Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading && policies.length === 0" class="no-policies text-center py-5 text-white">
+      <i class="bi bi-info-circle-fill fs-1"></i>
+      <h3 class="mt-3">No policies available</h3>
+      <p>Please check back later or contact our support team.</p>
+      <button class="btn btn-outline-light mt-2">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+      </button>
+    </div>
+  </div>
+
+  

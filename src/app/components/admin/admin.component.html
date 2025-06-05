@@ -1,0 +1,215 @@
+<div class="admin-dashboard bg-gradient-skyblue">
+    <div class="admin-container">
+  
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+      </div>
+  
+      <div class="policy-form-section">
+        <div class="form-card">
+          <h2 class="form-title">
+            <i class="bi" [class.bi-pencil-square]="isEditMode" [class.bi-file-earmark-plus]="!isEditMode"></i>
+            {{ isEditMode ? 'Edit Policy' : 'Create New Policy' }}
+          </h2>
+         
+          <form #policyForm="ngForm" (ngSubmit)="onSubmit()" class="policy-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="policyNumber">
+                  <i class="bi bi-hash me-1"></i>Policy Number
+                </label>
+                <input
+                  id="policyNumber"
+                  [(ngModel)]="selectedPolicy.policyNumber"
+                  name="policyNumber"
+                  required
+                  [disabled]="isEditMode"
+                  placeholder="POL-XXXXXX"
+                >
+              </div>
+  
+              <div class="form-group">
+                <label for="policyName">
+                  <i class="bi bi-card-heading me-1"></i>Policy Name
+                </label>
+                <input
+                  id="policyName"
+                  [(ngModel)]="selectedPolicy.policyName"
+                  name="policyName"
+                  required
+                  placeholder="e.g., Comprehensive Two-Wheeler"
+                >
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group">
+                <label for="policyType">
+                  <i class="bi bi-tags me-1"></i>Vehicle Type
+                </label>
+                <select
+                  id="policyType"
+                  [(ngModel)]="selectedPolicy.policyType"
+                  name="policyType"
+                  required
+                >
+                  <option value="" disabled selected>Select policy type</option>
+                  <option value="two-wheeler">Two-Wheeler</option>
+                  <option value="four-wheeler">Four-Wheeler</option>
+                  <option value="heavy-vehicle">Heavy Vehicle</option>
+                </select>
+              </div>
+  
+              <div class="form-group">
+                <label for="premiumAmount">
+                  <i class="bi bi-cash-stack me-1"></i>Premium Amount
+                </label>
+                <div class="input-with-symbol">
+                  <span class="symbol">₹</span>
+                  <input
+                    id="premiumAmount"
+                    type="number"
+                    [(ngModel)]="selectedPolicy.premiumAmount"
+                    name="premiumAmount"
+                    required
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                  >
+                </div>
+              </div>
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group">
+                <label for="coverageAmount">
+                  <i class="bi bi-shield-check me-1"></i>Coverage Amount
+                </label>
+                <div class="input-with-symbol">
+                  <span class="symbol">₹</span>
+                  <input
+                    id="coverageAmount"
+                    type="number"
+                    [(ngModel)]="selectedPolicy.coverageAmount"
+                    name="coverageAmount"
+                    required
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                  >
+                </div>
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="description">
+                <i class="bi bi-text-paragraph me-1"></i>Description
+              </label>
+              <textarea
+                id="description"
+                [(ngModel)]="selectedPolicy.description"
+                name="description"
+                rows="3"
+                placeholder="Enter policy details and benefits..."
+              ></textarea>
+            </div>
+  
+            <div class="form-actions">
+              <button type="submit" class="btn-submit" [disabled]="policyForm.invalid">
+                <i class="bi" [class.bi-save]="isEditMode" [class.bi-plus-circle]="!isEditMode"></i>
+                {{ isEditMode ? 'Save Changes' : 'Create Policy' }}
+              </button>
+              <button
+                type="button"
+                class="btn-cancel"
+                (click)="resetForm()"
+                *ngIf="isEditMode"
+              >
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+  
+      <div class="policies-list-section">
+        <h2 class="section-title">
+          <i class="bi bi-list-check me-2"></i>All Policies
+          <span class="badge">{{ policies.length }} policies</span>
+        </h2>
+       
+        <div *ngIf="policies.length > 0" class="policies-grid">
+          <div *ngFor="let policy of policies" class="policy-card">
+            <div class="policy-header">
+              <h3>{{ policy.policyName }}</h3>
+              <span class="policy-type" [class.two-wheeler]="policy.policyType === 'two-wheeler'"
+                                   [class.four-wheeler]="policy.policyType === 'four-wheeler'"
+                                   [class.heavy-vehicle]="policy.policyType === 'heavy-vehicle'">
+                {{ policy.policyType | titlecase }}
+              </span>
+            </div>
+           
+            <div class="policy-details">
+              <p><strong><i class="bi bi-hash"></i> ID:</strong> {{ policy.policyNumber }}</p>
+              <p><strong><i class="bi bi-currency-rupee"></i> Premium:</strong> {{ policy.premiumAmount | currency:'INR':'symbol' }}</p>
+              <p><strong><i class="bi bi-shield-check"></i> Coverage:</strong> {{ policy.coverageAmount | currency:'INR':'symbol' }}</p>
+              <p class="policy-description">{{ policy.description || 'No description available' }}</p>
+            </div>
+           
+            <div class="policy-actions">
+              <button class="btn-edit" (click)="editPolicy(policy)">
+                <i class="bi bi-pencil-square"></i> Edit
+              </button>
+              <button class="btn-delete" (click)="deletePolicy(policy.policyNumber)">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+       
+        <div *ngIf="policies.length === 0" class="no-policies">
+          <i class="bi bi-info-circle-fill"></i>
+          <p>No policies found</p>
+        </div>
+      </div>
+    </div>
+  </div>
+   <footer class="footer mt-5 py-4 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5><i class="bi bi-shield-lock me-2"></i> Vehisafe</h5>
+          <p>Protecting what matters most to you since 2010.</p>
+          <div class="social-icons">
+            <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Claims</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Support</a></li>
+            <li><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Legal</h5>
+          <ul class="list-unstyled">
+            <li><a href="/privacy-policy" class="text-white text-decoration-none">Privacy Policy</a></li>
+            <li><a href="/terms-of-service" class="text-white text-decoration-none">Terms of Service</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Cookies Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4 bg-light">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p class="mb-0">&copy; 2025 Vehisafe. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>

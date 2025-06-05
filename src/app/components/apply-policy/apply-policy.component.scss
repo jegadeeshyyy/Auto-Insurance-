@@ -1,0 +1,126 @@
+/* Main Container */
+.apply-policy-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Application Card */
+.policy-application-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+/* Header */
+.application-header {
+  position: relative;
+}
+
+.policy-number-badge {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: #56ccf2;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Elements */
+.form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #56ccf2;
+  box-shadow: 0 0 0 0.25rem rgba(86, 204, 242, 0.25);
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.invalid-feedback i {
+  margin-right: 5px;
+}
+
+/* File Upload Section */
+.file-upload-section {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.section-title {
+  color: #2f80ed;
+  font-weight: 600;
+}
+
+.file-upload-card {
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.file-upload-card:hover {
+  border-color: #56ccf2;
+  background-color: rgba(86, 204, 242, 0.05);
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.file-upload-icon {
+  background-color: #e9f7fe;
+  color: #2f80ed;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.file-upload-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-title {
+  font-weight: 600;
+  color: #333;
+}
